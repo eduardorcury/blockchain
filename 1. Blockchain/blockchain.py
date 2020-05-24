@@ -9,9 +9,9 @@ Created on Sat May 23 19:45:55 2020
 import datetime
 import hashlib
 import json
-from flask import flask, jsonify
+from flask import Flask, jsonify
 
-#Etapa 1 - Criar a blockchain
+# Etapa 1 - Criar a blockchain
 
 class Blockchain:
 
@@ -43,7 +43,7 @@ class Blockchain:
         while check_proof is False:
             hash_operation = hashlib.sha256(str(new_proof**2 - previous_proof**2).encode()).hexdigest()
             if hash_operation[:4] == '0000':
-                check_proof() = True
+                check_proof = True
             else:
                 new_proof += 1
     
@@ -76,12 +76,35 @@ class Blockchain:
         
         return True
     
-    
-            
+# Etapa 2 - Mineração
 
-            
+# Web App
+app = Flask(__name__)
         
+# Instanciando Blockchain
+blockchain = Blockchain()
+
+# Minerando
+@app.route('/mineblock', methods = ['GET'])
+
+def mine_block():
     
+    previous_block = blockchain.get_previous_block()
+    previous_proof = previous_block['proof']
+    proof = blockchain.proof_of_work(previous_proof)
+    previous_hash = blockchain.hash(previous_block)
+    
+    block = blockchain.create_block(proof, previous_hash)
+    
+    response = {'message': 'Parabéns, você acabou de minerar um bloco!',
+                'index': block['index'],
+                'timestamp': block['timestamp'],
+                'proof': block['proof'],
+                'previous_hash': block['previous_hash']}
+    
+    return jsonify(response), 200 
+
+
 
 
 
