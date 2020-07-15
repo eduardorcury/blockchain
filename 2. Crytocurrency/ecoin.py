@@ -167,6 +167,18 @@ def is_valid():
         
     return jsonify(response), 200
 
+@app.route('/add_transaction', methods = ['POST'])
+def add_transaction():
+    json = request.get_json()
+    transaction_keys = ['sender', 'receiver', 'amount']
+    if not all (key in json for key in transaction_keys):
+        return 'Elementos estão faltando na transação', 400
+    
+    index = blockchain.add_transaction(json['sender'], json['receiver'], json['amount'])
+    response = {'message': f'Transação adicionada ao bloco {index}'}
+    
+    return jsonify(response), 201
+
 # Iniciar
 app.run(host = '0.0.0.0', port = 5000)
 
