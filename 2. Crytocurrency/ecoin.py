@@ -171,6 +171,7 @@ def is_valid():
 def add_transaction():
     json = request.get_json()
     transaction_keys = ['sender', 'receiver', 'amount']
+    
     if not all (key in json for key in transaction_keys):
         return 'Elementos estão faltando na transação', 400
     
@@ -179,11 +180,27 @@ def add_transaction():
     
     return jsonify(response), 201
 
+# Etapa 3 - Descentralizar a blockchain
+    
+@app.route('/connect_node', methods = ['POST'])
+def connect_node():
+    json = request.get_json()
+    nodes = json.get('nodes')
+    
+    if nodes is None:
+        return 'Sem nós na mensagem', 400
+    
+    for node in nodes:
+        blockchain.add_node(node)
+    
+    response = {'message': 'Nós conectados com sucesso. A blockchain da ecoin contém os seguintes nós',
+                'total_nodes': list(blockchain.nodes)}
+    return jsonify(response), 201
+
 # Iniciar
 app.run(host = '0.0.0.0', port = 5000)
 
 
-# Etapa 3 - Descentralizar a blockchain
 
 
 
