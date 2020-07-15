@@ -197,6 +197,20 @@ def connect_node():
                 'total_nodes': list(blockchain.nodes)}
     return jsonify(response), 201
 
+@app.route('/replace_chain', methods = ['GET'])
+def replace_chain():
+    
+    is_chain_replaced = blockchain.replace_chain()
+    if is_chain_replaced:
+        response = {'message': 'O nó tinha uma blockchain menor que foi substituída',
+                    'new_chain': blockchain.chain}
+    else:
+        response = {'message': 'A blokchain é a de maior tamanho',
+                    'actual_chain': blockchain.chain}
+        
+    return jsonify(response), 200
+
+
 # Iniciar
 app.run(host = '0.0.0.0', port = 5000)
 
