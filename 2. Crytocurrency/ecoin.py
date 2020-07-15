@@ -105,7 +105,7 @@ class Blockchain:
             if response.status_code == 200:
                 length = response.json()['length']
                 chain = response.json()['chain']
-                if length > max_length and self.is_chain_valid():
+                if length > max_length and self.is_chain_valid(chain):
                     max_length = length
                     longest_chain = chain
                     
@@ -213,9 +213,3 @@ def replace_chain():
 
 # Iniciar
 app.run(host = '0.0.0.0', port = 5000)
-
-
-
-
-
-
